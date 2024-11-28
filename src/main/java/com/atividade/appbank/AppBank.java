@@ -148,6 +148,7 @@ public class AppBank extends javax.swing.JFrame {
     }
 
     private void bloquearBotao() {
+//        teste
         AceAccount.setEnabled(false);
         new Timer(TEMPO_BLOQUEIO_MS, e -> {
             tentativas = 0;
