@@ -60,6 +60,7 @@ public class InfoUser extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         Telefonetxt = new javax.swing.JLabel();
         telefoneUpdate = new javax.swing.JTextField();
+        ExcluirAcount = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Seus Dados");
@@ -103,11 +104,11 @@ public class InfoUser extends javax.swing.JFrame {
         agenciatxt.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         agenciatxt.setText("N° da Conta");
 
-        nametxt.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        nametxt.setText("Nome Completo");
+        nametxt.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        nametxt.setText("Nome Completo*");
 
-        cpftxt.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        cpftxt.setText("CPF");
+        cpftxt.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        cpftxt.setText("CPF*");
 
         cpfUpdate1.setText("{cpf}");
         cpfUpdate1.addActionListener(new java.awt.event.ActionListener() {
@@ -116,8 +117,8 @@ public class InfoUser extends javax.swing.JFrame {
             }
         });
 
-        rgtxt.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        rgtxt.setText("RG");
+        rgtxt.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        rgtxt.setText("RG*");
 
         agenciaUpdate.setEditable(false);
         agenciaUpdate.setText("{numero}");
@@ -132,8 +133,8 @@ public class InfoUser extends javax.swing.JFrame {
             }
         });
 
-        emailtxt1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        emailtxt1.setText("E-mail");
+        emailtxt1.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        emailtxt1.setText("E-mail*");
 
         agenciaUpdate1.setEditable(false);
         agenciaUpdate1.setText("{agencia}");
@@ -172,13 +173,27 @@ public class InfoUser extends javax.swing.JFrame {
             }
         });
 
-        Telefonetxt.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        Telefonetxt.setText("Telefone");
+        Telefonetxt.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        Telefonetxt.setText("Telefone*");
 
         telefoneUpdate.setText("{telefone}");
         telefoneUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 telefoneUpdateActionPerformed(evt);
+            }
+        });
+
+        ExcluirAcount.setBackground(new java.awt.Color(242, 46, 46));
+        ExcluirAcount.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        ExcluirAcount.setForeground(new java.awt.Color(255, 255, 255));
+        ExcluirAcount.setText("Excluir conta");
+        ExcluirAcount.setBorder(null);
+        ExcluirAcount.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ExcluirAcount.setFocusable(false);
+        ExcluirAcount.setRequestFocusEnabled(false);
+        ExcluirAcount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExcluirAcountActionPerformed(evt);
             }
         });
 
@@ -189,7 +204,10 @@ public class InfoUser extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ExcluirAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(agenciaUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,32 +284,28 @@ public class InfoUser extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rgUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(32, 32, 32)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ExcluirAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void usernameUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameUpdateActionPerformed
-        }//GEN-LAST:event_usernameUpdateActionPerformed
+    private void usernameUpdateActionPerformed(java.awt.event.ActionEvent evt) {}                                              
 
-    private void emailUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailUpdate1ActionPerformed
-    }//GEN-LAST:event_emailUpdate1ActionPerformed
+    private void emailUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {}                                            
 
-    private void tipoContaUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoContaUpdateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tipoContaUpdateActionPerformed
+    private void tipoContaUpdateActionPerformed(java.awt.event.ActionEvent evt) {}                                               
 
     private void cpfUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfUpdate1ActionPerformed
     }//GEN-LAST:event_cpfUpdate1ActionPerformed
 
     private void agenciaUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agenciaUpdateActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_agenciaUpdateActionPerformed
 
     private void agenciaUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agenciaUpdate1ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_agenciaUpdate1ActionPerformed
 
     private void rgUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rgUpdate1ActionPerformed
@@ -334,7 +348,8 @@ public class InfoUser extends javax.swing.JFrame {
 
                 preencherDados();
 
-                this.dispose();
+//                this.dispose();
+                JOptionPane.showMessageDialog(this, "Seus dados foram atualizados.");
 
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao atualizar os dados.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -344,6 +359,10 @@ public class InfoUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao processar a atualização.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void ExcluirAcountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExcluirAcountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ExcluirAcountActionPerformed
 
     private JSONObject enviarPutParaApi(String url, JSONObject dados) {
         try {
@@ -389,7 +408,6 @@ public class InfoUser extends javax.swing.JFrame {
         }
         return null; // Retorna null em caso de erro
     }
-
 
     private void setIcon() {
         try {
@@ -455,6 +473,7 @@ public class InfoUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ExcluirAcount;
     private javax.swing.JLabel Telefonetxt;
     private javax.swing.JTextField agenciaUpdate;
     private javax.swing.JTextField agenciaUpdate1;
