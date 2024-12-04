@@ -68,31 +68,36 @@ public class AppBank extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(293, 293, 293)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                        .addComponent(AceAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(AceAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 183,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(QBank)
                                         .addComponent(NAcount)
-                                        .addComponent(NumberAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(270, 270, 270))
-        );
+                                        .addComponent(NumberAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 183,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(270, 270, 270)));
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
                         .addGap(110, 110, 110)
-                        .addComponent(QBank, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(QBank, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(NAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 19,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NumberAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(NumberAcount, javax.swing.GroupLayout.PREFERRED_SIZE, 33,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AceAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(235, Short.MAX_VALUE)
-        );
+                        .addComponent(AceAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 38,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(235, Short.MAX_VALUE));
 
         pack();
     }
 
     private void AceAccountActionPerformed(java.awt.event.ActionEvent evt) {
         if (tentativas >= 3) {
-            JOptionPane.showMessageDialog(this, "Muitas tentativas falhas. Aguarde 10 segundos para tentar novamente.", "Bloqueado", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Muitas tentativas falhas. Aguarde 10 segundos para tentar novamente.",
+                    "Bloqueado", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -105,33 +110,52 @@ public class AppBank extends javax.swing.JFrame {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                String resposta = realizarRequisicao("http://localhost:8080/login/" + numeroConta);
-                if (resposta == null || resposta.isBlank() || resposta.equals("null")) {
-                    mostrarErro("Usuário não encontrado. Verifique o número da conta.");
-                    return null;
+                String resposta = null;
+                try {
+                    resposta = realizarRequisicao("http://localhost:8080/login/" + numeroConta);
+                    if (resposta == null || resposta.isBlank() || resposta.equals("null")) {
+                        mostrarErro("Usuário não encontrado. Verifique o número da conta.");
+                        return null;
+                    }
+                    numeroContaArmazenada = numeroConta;
+                    respostaArmazenada = resposta;
+
+                    JSONObject jsonObject = new JSONObject(resposta);
+                    JSONObject pessoaObject = jsonObject.optJSONObject("pessoa");
+
+                    String nome = pessoaObject != null ? pessoaObject.optString("nome", "Usuário Desconhecido")
+                            : "Usuário Desconhecido";
+                    double saldo = jsonObject.optDouble("saldo", 0.0);
+                    String tipoConta = jsonObject.optString("tipoConta", "Não especificado");
+
+                    String saldoFormatado;
+                    if (saldo == 0.0) {
+                        saldoFormatado = "0,00";
+                    } else {
+                        java.text.DecimalFormat df = new java.text.DecimalFormat("#,###.00");
+                        saldoFormatado = df.format(saldo).replace('.', ',');
+                    }
+
+                    InterfaceUserLog interfaceUserLog = new InterfaceUserLog();
+                    interfaceUserLog.setTitle("Dashboard - " + nome);
+                    interfaceUserLog.moneyuser.setText("Saldo: R$ " + saldoFormatado);
+                    interfaceUserLog.nameuser.setText("Olá, " + nome);
+                    interfaceUserLog.jLabel1.setText("Conta: " + tipoConta);
+
+                    iniciarAtualizacaoAutomatica(interfaceUserLog, numeroConta);
+
+                    interfaceUserLog.setVisible(true);
+                    dispose();
+                } catch (Exception e) {
+                    mostrarErro("Erro ao acessar a conta. Tente novamente mais tarde.");
+                    e.printStackTrace();
                 }
-
-                numeroContaArmazenada = numeroConta;
-                respostaArmazenada = resposta;
-
-                JSONObject jsonObject = new JSONObject(resposta);
-                JSONObject pessoaObject = jsonObject.optJSONObject("pessoa");
-
-                String nome = pessoaObject != null ? pessoaObject.optString("nome", "Usuário Desconhecido") : "Usuário Desconhecido";
-                double saldo = jsonObject.optDouble("saldo", 0.0);
-                String tipoConta = jsonObject.optString("tipoConta", "Não especificado");
-
-                InterfaceUserLog interfaceUserLog = new InterfaceUserLog();
-                interfaceUserLog.setTitle("Dashboard - " + nome);
-                interfaceUserLog.moneyuser.setText("Saldo: R$ " + String.format("%.2f", saldo));
-                interfaceUserLog.nameuser.setText("Olá, " + nome);
-                interfaceUserLog.jLabel1.setText("Conta: " + tipoConta);
-
-                iniciarAtualizacaoAutomatica(interfaceUserLog, numeroConta);
-
-                interfaceUserLog.setVisible(true);
-                dispose();
                 return null;
+            }
+
+            @Override
+            protected void done() {
+                super.done();
             }
         }.execute();
     }
@@ -160,7 +184,8 @@ public class AppBank extends javax.swing.JFrame {
         JSONObject jsonObject = new JSONObject(respostaAtualizada);
         JSONObject pessoaObject = jsonObject.optJSONObject("pessoa");
 
-        String nome = pessoaObject != null ? pessoaObject.optString("nome", "Usuário Desconhecido") : "Usuário Desconhecido";
+        String nome = pessoaObject != null ? pessoaObject.optString("nome", "Usuário Desconhecido")
+                : "Usuário Desconhecido";
         double saldo = jsonObject.optDouble("saldo", 0.0);
         String tipoConta = jsonObject.optString("tipoConta", "Não especificado");
 
@@ -171,19 +196,23 @@ public class AppBank extends javax.swing.JFrame {
     }
 
     private void NumberAcountKeyPressed(java.awt.event.KeyEvent evt) {
-        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V) evt.consume();
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) AceAccount.doClick();
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V)
+            evt.consume();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            AceAccount.doClick();
     }
 
     private String realizarRequisicao(String urlString) throws Exception {
         HttpURLConnection con = (HttpURLConnection) new URL(urlString).openConnection();
         con.setRequestMethod("GET");
-        if (con.getResponseCode() != 200) throw new RuntimeException("Erro ao acessar API");
+        if (con.getResponseCode() != 200)
+            throw new RuntimeException("Erro ao acessar API");
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
             StringBuilder response = new StringBuilder();
             String line;
-            while ((line = in.readLine()) != null) response.append(line);
+            while ((line = in.readLine()) != null)
+                response.append(line);
             return response.toString();
         }
     }
@@ -192,8 +221,13 @@ public class AppBank extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
         tentativas++;
         if (tentativas >= 3) {
-            JOptionPane.showMessageDialog(this, "Muitas tentativas falhas. Aguarde 10 segundos para tentar novamente.", "Bloqueio Temporário", JOptionPane.WARNING_MESSAGE);
-            try { Thread.sleep(10000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            JOptionPane.showMessageDialog(this, "Muitas tentativas falhas. Aguarde 10 segundos para tentar novamente.",
+                    "Bloqueio Temporário", JOptionPane.WARNING_MESSAGE);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             tentativas = 0;
         }
     }
