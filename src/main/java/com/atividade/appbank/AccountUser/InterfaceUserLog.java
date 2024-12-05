@@ -19,11 +19,17 @@ import java.util.concurrent.TimeUnit;
 import static com.atividade.appbank.AppBank.numeroContaArmazenada;
 import static com.atividade.appbank.AppBank.respostaArmazenada;
 
+
 /**
  *
  * @author Eliseu
  */
 public class InterfaceUserLog extends javax.swing.JFrame {
+
+    private boolean isTransferUserOpen = false;
+    private boolean isInfoUserOpen = false;
+    private boolean isCreateAccountOpen = false;
+
 
     /**
      * Creates new form InterfaceUserLog
@@ -313,10 +319,10 @@ public class InterfaceUserLog extends javax.swing.JFrame {
                         String extratoMensagem;
 
                         if (numeroContaArmazenada.equals(contaOrigemNumero)) {
-                            extratoMensagem = String.format("-> Você enviou %.2f para a conta %s", valor,
+                            extratoMensagem = String.format("-> Você enviou R$%.2f para %s", valor,
                                     contaDestinoNumero);
                         } else {
-                            extratoMensagem = String.format("<- Você recebeu %.2f do usuário %s", valor,
+                            extratoMensagem = String.format("<- Você recebeu R$%.2f do %s", valor,
                                     contaOrigemNumero);
                         }
 
@@ -352,22 +358,49 @@ public class InterfaceUserLog extends javax.swing.JFrame {
         }
     }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        TransferUser Trasnfer = new TransferUser();
-        Trasnfer.setVisible(true);
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!isTransferUserOpen) {
+            isTransferUserOpen = true;
+            TransferUser transfer = new TransferUser();
+            transfer.setVisible(true);
+
+            transfer.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    isTransferUserOpen = false;
+                }
+            });
+        }
     }// GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        InfoUser infoUserWindow = new InfoUser();
-        infoUserWindow.setVisible(true);
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!isInfoUserOpen) {
+            isInfoUserOpen = true;
+            InfoUser infoUserWindow = new InfoUser();
+            infoUserWindow.setVisible(true);
+
+            infoUserWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    isInfoUserOpen = false;
+                }
+            });
+        }
     }// GEN-LAST:event_jButton1ActionPerformed
 
-    private void CreateAccountActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_CreateAccountActionPerformed
-        // TODO add your handling code here:
-        CreateAccount CreateInfo = new CreateAccount();
-        CreateInfo.setVisible(true);
+    private void CreateAccountActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!isCreateAccountOpen) {
+            isCreateAccountOpen = true;
+            CreateAccount createInfo = new CreateAccount();
+            createInfo.setVisible(true);
+
+            createInfo.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    isCreateAccountOpen = false;
+                }
+            });
+        }
     }// GEN-LAST:event_CreateAccountActionPerformed
 
     private void setIcon() {
