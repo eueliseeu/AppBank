@@ -18,6 +18,8 @@ public class AppBank extends javax.swing.JFrame {
     private int tentativas = 0;
     private Timer atualizacaoTimer;
 
+    private InterfaceUserLog interfaceUserLogAberta;
+
     public AppBank() {
         initComponents();
         setIcon();
@@ -110,13 +112,13 @@ public class AppBank extends javax.swing.JFrame {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                String resposta = null;
                 try {
-                    resposta = realizarRequisicao("http://localhost:8080/login/" + numeroConta);
+                    String resposta = realizarRequisicao("http://localhost:8080/login/" + numeroConta);
                     if (resposta == null || resposta.isBlank() || resposta.equals("null")) {
                         mostrarErro("Usuário não encontrado. Verifique o número da conta.");
                         return null;
                     }
+
                     numeroContaArmazenada = numeroConta;
                     respostaArmazenada = resposta;
 
@@ -136,26 +138,27 @@ public class AppBank extends javax.swing.JFrame {
                         saldoFormatado = df.format(saldo).replace('.', ',');
                     }
 
-                    InterfaceUserLog interfaceUserLog = new InterfaceUserLog();
-                    interfaceUserLog.setTitle("Dashboard - " + nome);
-                    interfaceUserLog.moneyuser.setText("Saldo: R$ " + saldoFormatado);
-                    interfaceUserLog.nameuser.setText("Olá, " + nome);
-                    interfaceUserLog.jLabel1.setText("Conta: " + tipoConta);
+                    if (interfaceUserLogAberta == null || !interfaceUserLogAberta.isVisible()) {
+                        interfaceUserLogAberta = new InterfaceUserLog();
+                        interfaceUserLogAberta.setTitle("Dashboard - " + nome);
+                        interfaceUserLogAberta.moneyuser.setText("Saldo: R$ " + saldoFormatado);
+                        interfaceUserLogAberta.nameuser.setText("Olá, " + nome);
+                        interfaceUserLogAberta.jLabel1.setText("Conta: " + tipoConta);
 
-                    iniciarAtualizacaoAutomatica(interfaceUserLog, numeroConta);
+                        iniciarAtualizacaoAutomatica(interfaceUserLogAberta, numeroConta);
 
-                    interfaceUserLog.setVisible(true);
-                    dispose();
+                        interfaceUserLogAberta.setVisible(true);
+                        dispose();
+                    } else {
+                        interfaceUserLogAberta.toFront();
+                        interfaceUserLogAberta.requestFocus();
+                    }
+
                 } catch (Exception e) {
                     mostrarErro("Erro ao acessar a conta. Tente novamente mais tarde.");
                     e.printStackTrace();
                 }
                 return null;
-            }
-
-            @Override
-            protected void done() {
-                super.done();
             }
         }.execute();
     }
