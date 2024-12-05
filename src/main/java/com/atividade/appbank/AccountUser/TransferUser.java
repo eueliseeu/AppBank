@@ -8,6 +8,9 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -84,6 +87,7 @@ public class TransferUser extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel2.setText("N° da conta");
+        setPlaceholder(AgenciaAccountDestin, "929601");
 
         agenciaUpdate1.setEditable(false);
         agenciaUpdate1.setText("{agencia}");
@@ -111,13 +115,14 @@ public class TransferUser extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel3.setText("Agência*");
+        setPlaceholder(AgenciaAcc, "763");
 
         AgenciaAcc.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel4.setText("Valor*");
+        setPlaceholder(MoneyValue1, "50,00");
 
-        MoneyValue1.setText("0,00");
         MoneyValue1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MoneyValue1ActionPerformed(evt);
@@ -428,6 +433,34 @@ public class TransferUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Ocorreu um erro ao processar a transferência: " + e.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void setPlaceholder(JTextField textField, String placeholder) {
+        Font poppinsFont = new Font("Poppins", Font.ITALIC, 12);
+        textField.setText(placeholder);
+        textField.setForeground(Color.GRAY);
+        textField.setFont(poppinsFont);
+
+        textField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                    textField.setFont(new Font("Poppins", Font.BOLD, 12));
+
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(Color.GRAY);
+                    textField.setFont(poppinsFont);
+                }
+            }
+        });
     }
 
     private void setIcon() {
