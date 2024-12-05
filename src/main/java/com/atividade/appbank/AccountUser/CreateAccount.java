@@ -5,6 +5,9 @@
 package com.atividade.appbank.AccountUser;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.File;
 import com.google.gson.Gson;
 import java.io.OutputStream;
@@ -76,18 +79,23 @@ public class CreateAccount extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel1.setText("Nome Completo*");
 
+        setPlaceholder(nameUSER, "Digite seu nome completo");
+
         jLabel2.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel2.setText("CPF*");
+        setPlaceholder(cpfUser, "Digite seu CPF");
 
         jLabel3.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel3.setText("RG*");
+        setPlaceholder(rgUSER, "Digite seu RG");
 
         jLabel4.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel4.setText("Email*");
+        setPlaceholder(EmailUser, "Jhown@gmail.com");
 
         jLabel5.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel5.setText("Telefone*");
-
+        setPlaceholder(telefoneUSER, "6699244780");
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(
                 new String[] { "Selecione...", "corrente", "polpança", "salario" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -238,6 +246,34 @@ public class CreateAccount extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new CreateAccount().setVisible(true);
+            }
+        });
+    }
+
+    private void setPlaceholder(JTextField textField, String placeholder) {
+        Font poppinsFont = new Font("Poppins", Font.ITALIC, 12);
+        textField.setText(placeholder);
+        textField.setForeground(Color.GRAY);
+        textField.setFont(poppinsFont);
+
+        textField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                    textField.setFont(new Font("Poppins", Font.BOLD, 12));
+
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(Color.GRAY);
+                    textField.setFont(poppinsFont);
+                }
             }
         });
     }
